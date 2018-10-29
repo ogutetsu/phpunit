@@ -18,11 +18,23 @@ class CardTest extends TestCase
         $this->card = new Card('4', 'spades');
     }
 
-    public function testIsInMatchingSet()
+
+    public function matchingCardDataProvider()
     {
-        $matchingCard = new Card('4', 'hearts');
-        $this->assertTrue($this->card->isInMatchingSet($matchingCard),
-            '<4 of Spades> should match < 4 of Hearts>');
+        return array(
+            array(new Card('4', 'hearts'), true, 'should match'),
+            array(new Card('5', 'hearts'), false, 'should not match')
+        );
+    }
+
+    /**
+     * @dataProvider matchingCardDataProvider
+     */
+    public function testIsInMatchingSet(Card $matchingCard, $expected, $msg)
+    {
+        $this->assertEquals($expected, $this->card->isInMatchingSet($matchingCard),
+            "<{$this->card->getNumber()} or {$this->card->getSuit()}> {$msg} ".
+            "<{$matchingCard->getNumber()} or {$matchingCard->getSuit()}>");
     }
 
     public function testIsNotInMatchingSet()
